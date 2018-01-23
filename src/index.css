@@ -1,0 +1,13 @@
+html {
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, “Roboto”, “Droid Sans”, “Helvetica Neue”, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: white;
+  background: hsl(210,50%,15%);
+  /*background: linear-gradient(150deg, hsl(210,40%,18%), hsl(260,40%,18%));*/
+}
