@@ -8,6 +8,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, “Roboto”, “Droid Sans”, “Helvetica Neue”, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   color: white;
-  background: hsl(210,50%,15%);
+  background: hsl(210,50%,18%);
   /*background: linear-gradient(150deg, hsl(210,40%,18%), hsl(260,40%,18%));*/
 }

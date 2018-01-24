@@ -46,8 +46,10 @@ class App extends Component {
     previewReader.onloadend = () => {
       result.previewURL = previewReader.result;
     }
-    rawReader.onloadend = () => {
+    rawReader.onloadend = async () => {
       result.raw = rawReader.result;
+      const contentHash = await window.crypto.subtle.digest('SHA-256', result.raw);
+      result.contentHash = btoa(String.fromCharCode(...new Uint8Array(contentHash))); 
       let files = this.state.files;
       files.push(result);
       this.setState({ files });
@@ -58,20 +60,33 @@ class App extends Component {
   };
 
   uploadToIpfs = async (file) => {
-    this.state.node.files.add([Buffer.from(file.raw)], (err, filesAdded) => {
-      console.log(filesAdded);
+    this.state.node.files.add(Buffer.from(file.raw), (err, filesAdded) => {
       if (err) throw err;
       const added = filesAdded[0];
       file.ipfsHash = added.hash;
       console.log(`Added file: ${ added.hash }`);
+      const files = this.state.files;
+      const toUpdate = files.findIndex((item) => item.contentHash === file.contentHash);
+      files[toUpdate] = file;
+      this.setState({ files });
     });
+  }
+
+  deleteFile = (file) => {
+    const files = this.state.files;
+    const toDelete = files.findIndex((item) => item.contentHash === file.contentHash);
+    files.splice(toDelete, 1);
+    this.setState({ files });
   }
 
   render() {
     return (
       <div className="app">
         <input type='file' ref='fileInput' onChange={ this.saveFile } />
-        <FileTracker files={ this.state.files } uploadToIpfs= { this.uploadToIpfs }/>
+        <FileTracker 
+          files={ this.state.files } 
+          uploadToIpfs={ this.uploadToIpfs }
+          deleteFile={ this.deleteFile }/>
       </div>
     );
   }
